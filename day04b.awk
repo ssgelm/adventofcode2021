@@ -9,7 +9,6 @@ function check_num(num) {
 function check_board(board_num) {
   # check for horizontal match
   for (i=0; i<row; i++) {
-    sum = 0
     b = 0
     for (j=1; j<=NF; j++) {
       if (! check_num(boards[board_num, i, j])) {
@@ -24,7 +23,6 @@ function check_board(board_num) {
 
   # check for vertical match
   for (j=1; j<=NF; j++) {
-    sum = 0
     b = 0
     for (i=0; i<row; i++) {
       if (! check_num(boards[board_num, i, j])) {
@@ -72,20 +70,14 @@ NF == 5 {
   row++
 }
 END {
-  # for (board in unsolved_boards) printf "%d, ", board
-  # print ""
   cur_drawn = 0
-  while (length(unsolved_boards) > 1) {
+  while (length(unsolved_boards) > 0) {
     drawn_nums[cur_drawn] = num_basket[cur_drawn]
     for (board in unsolved_boards) {
       if (check_board(board)) delete unsolved_boards[board]
     }
+    if (length(unsolved_boards) == 1) final_board = board
     cur_drawn++
-    # for (board in unsolved_boards) printf "%d, ", board
-    # print ""
-    # print length(unsolved_boards), cur_drawn-1, num_boards
   }
-  for (board in unsolved_boards) final_board = board
-  # print boards[final_board, 0, 1], drawn_nums[cur_drawn-1], sum_unmarked(final_board)
   print sum_unmarked(final_board) * drawn_nums[cur_drawn-1]
 }
